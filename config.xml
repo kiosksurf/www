@@ -6,7 +6,7 @@
         id        = "com.alarme"
         version   = "1.0.0">
 
-    <name>Teste camera</name>
+    <name>Teste Map</name>
 
     <description>
         Hello World sample application that responds to the deviceready event.
