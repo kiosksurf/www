@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <style>
-  	html, body {
+    <title>Geolocation</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <link href="/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+    <!--
+    Include the maps javascript with sensor=true because this code is using a
+    sensor (a GPS locator) to determine the user's location.
+    See: https://developers.google.com/apis/maps/documentation/javascript/basics#SpecifyingSensor
+    -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+	 <style>
+		html, body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -33,61 +43,37 @@
   border: 1px solid #999;
 }
 	</style>
-    <title>Geolocation</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <link href="/maps/documentation/javascript/examples/default.css" rel="stylesheet">
-    <!--
-    Include the maps javascript with sensor=true because this code is using a
-    sensor (a GPS locator) to determine the user's location.
-    See: https://developers.google.com/apis/maps/documentation/javascript/basics#SpecifyingSensor
-    -->
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
-
     <script>
 var map;
 
 function initialize() {
-	
-	var mapOptions = {
-		zoom: 15,
-		streetViewControl: false,
-		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		zoomControl: true,
-		zoomControlOptions: {
-            style: google.maps.ZoomControlStyle.LARGE
-        }
-	};
+  var mapOptions = {
+    zoom: 6,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
 
-	map = new google.maps.Map(document.getElementById('map-canvas'),mapOptions);
+  // Try HTML5 geolocation
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude,
+                                       position.coords.longitude);
 
-	// Try HTML5 geolocation
-	if(navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      var infowindow = new google.maps.InfoWindow({
+        map: map,
+        position: pos,
+        content: 'Location found using HTML5.'
+      });
 
-		/*var infowindow = new google.maps.InfoWindow({
-			map: map,
-			position: pos,
-			content: 'Location found using HTML5.'
-		});*/
-		var marker = new google.maps.Marker({
-			position: pos,
-			map: map,
-			title: '',
-			icon: 'http://cademeufretado.com.br/img/baixaPin.png'
-		});
-
-		marker.setAnimation(google.maps.Animation.DROP);
-
-		map.setCenter(pos);
-		}, function() {
-			handleNoGeolocation(true);
-		});
-	} else {
-		// Browser doesn't support Geolocation
-		handleNoGeolocation(false);
-	}
+      map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
 }
 
 function handleNoGeolocation(errorFlag) {
@@ -103,7 +89,7 @@ function handleNoGeolocation(errorFlag) {
     content: content
   };
 
-  var marker = new google.maps.Marker(options);
+  var infowindow = new google.maps.InfoWindow(options);
   map.setCenter(options.position);
 }
 
