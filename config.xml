@@ -4,7 +4,7 @@ xmlns:gap = "http://phonegap.com/ns/1.0"
 id = "com.alarme"
 version = "1.0.0">
 
-  <name>MAP TESTE</name>
+  <name>Map Alarme</name>
   <description>An example application that uses the PhoneGap Geolocation API</description>
   <author href="http://johnwargo.com"
   email="john@johnwargo.com">John M. Wargo</author>
